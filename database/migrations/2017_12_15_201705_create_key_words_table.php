@@ -22,7 +22,7 @@ class CreateKeyWordsTable extends Migration
             $table->foreign('subject_id')->references('id')->on('subjects')->onDelete('cascade');
 
             $table->unsignedInteger('topic_id')->nullable();
-            $table->foreign('topic_id')->references('id')->on('subjects')->onDelete('cascade');
+            $table->foreign('topic_id')->references('id')->on('topics')->onDelete('cascade');
         });
         Schema::enableForeignKeyConstraints();
     }
