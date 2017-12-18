@@ -19,5 +19,6 @@ class DatabaseSeeder extends Seeder
         factory(App\Models\Game::class, 10)->create();
         factory(App\Models\Question::class, 10)->create();
         factory(App\Models\Answer::class, 10)->create();
+        $this->call(GameQuestionsTableSeeder::class);
     }
 }
