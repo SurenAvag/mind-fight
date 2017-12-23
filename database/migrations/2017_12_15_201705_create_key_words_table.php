@@ -13,7 +13,7 @@ class CreateKeyWordsTable extends Migration
      */
     public function up()
     {
-        Schema::disableForeignKeyConstraints();
+        Schema::disableForeignKeyConstraints();;
         Schema::create('key_words', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
