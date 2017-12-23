@@ -4,7 +4,12 @@ namespace App\Models;
 
 class Question extends BaseModel
 {
-    public $timestamps = false;
+    protected $fillable = [
+        'text',
+        'subject_id',
+        'topic_id',
+        'level'
+    ];
 
     const LEVELS = [
         'easy'      => 1,

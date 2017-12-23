@@ -25,6 +25,7 @@ class CreateQuestionsTable extends Migration
             $table->foreign('topic_id')->references('id')->on('topics')->onDelete('cascade');
 
             $table->integer('level')->default(1)->comment('1=>easy,2=>middle,3=>high');
+            $table->timestamps();
         });
         Schema::enableForeignKeyConstraints();
     }
