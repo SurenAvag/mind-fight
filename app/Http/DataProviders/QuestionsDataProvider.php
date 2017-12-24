@@ -9,6 +9,6 @@ class QuestionsDataProvider
 {
     public function getQuestions(): LengthAwarePaginator
     {
-        return Question::paginate();
+        return Question::with('subject')->paginate();
     }
 }

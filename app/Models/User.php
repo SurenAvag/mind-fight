@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Facades\Auth;
 
 class User extends Authenticatable
 {
@@ -20,9 +21,14 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name',
+        'id',
+        'first_name',
+        'last_name',
+        'type',
         'email',
         'password',
+        'point',
+        'api_token'
     ];
 
     /**
@@ -34,4 +40,16 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
+
+    public function updateToken()
+    {
+        $this->update(['api_token' => str_random(50)]);
+
+        return $this;
+    }
+
+    public function logout()
+    {
+        $this->updateToken();
+    }
 }

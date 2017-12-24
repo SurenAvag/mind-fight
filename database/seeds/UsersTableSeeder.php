@@ -6,18 +6,15 @@ class UsersTableSeeder extends Seeder
 {
     public function run()
     {
-        $faker = Faker\Factory::create();
+        factory(\App\Models\User::class)->create([
+            'first_name' => 'Suren',
+            'last_name' => 'Avagyan',
+            'email' => 's404747@gmail.com',
+            'password' => bcrypt('asdasd'),
+        ]);
 
-        foreach (range(1, 10) as $index) {
-            \App\Models\User::create([
-                'first_name'        => $faker->firstName,
-                'last_name'         => $faker->lastName,
-                'type'              => rand(1, 2),
-                'email'             => $faker->email,
-                'password'          => bcrypt('asdasd'),
-                'point'             => rand(100, 1000),
-                'remember_token'    => str_random(10),
-            ]);
-        }
+        factory(\App\Models\User::class, rand(10, 20))->create([
+
+        ]);
     }
 }

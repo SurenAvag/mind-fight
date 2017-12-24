@@ -24,6 +24,7 @@ $factory->define(App\Models\User::class, function (Faker $faker) {
         'password'          => bcrypt('asdasd'),
         'point'             => rand(100, 1000),
         'remember_token'    => str_random(10),
+        'api_token'    => str_random(50),
     ];
 });
 

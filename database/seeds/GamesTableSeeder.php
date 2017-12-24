@@ -13,7 +13,7 @@ class GamesTableSeeder extends Seeder
     {
         $faker = Faker\Factory::create();
 
-        foreach (range(1, 10) as $index) {
+        foreach (range(1, 50) as $index) {
             \App\Models\Game::create([
                 'name'          => $faker->name,
                 'winner_id'     => \App\Models\User::inRandomOrder()->first()->id,
