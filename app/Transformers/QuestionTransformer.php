@@ -31,9 +31,9 @@ class QuestionTransformer extends Transformer
     {
         return array_merge($this->simpleTransform($question), [
             'subject'       => $question->subject ? SubjectTransformer::simple($question->subject) : null,
-
-            'topic_id'      => $question->topic_id,
-            'level'         => $question->level
+            'topic'         => $question->topic ? TopicTransformer::simple($question->topic) : null,
+            'level'         => $question->level,
+            'answers'         => $question->answers->isNotEmpty() ? AnswerTransformer::collection($question->answers, 'simpleTransform') : null,
         ]);
     }
 
@@ -50,7 +50,8 @@ class QuestionTransformer extends Transformer
     {
         return [
             'id'    => $item->id,
-            'text'  => $item->text
+            'text'  => $item->text . $item->trueAnswer->id,
+            'time'      => $item->time,
         ];
     }
 }

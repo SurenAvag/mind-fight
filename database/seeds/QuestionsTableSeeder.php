@@ -11,10 +11,11 @@ class QuestionsTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(\App\Models\Question::class, 25)->create([
-            'subject_id'        => \App\Models\Subject::inRandomOrder()->first()->id,
-            'topic_id'          => \App\Models\Topic::inRandomOrder()->first()->id,
-            'level'             => array_random(\App\Models\Question::LEVELS),
-        ]);
+        foreach (\App\Models\Topic::all() as $topic) {
+            factory(\App\Models\Question::class, rand(3, 5))->create([
+                'subject_id' => $topic->subject_id,
+                'topic_id' => $topic->id,
+            ]);
+        }
     }
 }

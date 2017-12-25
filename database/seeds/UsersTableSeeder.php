@@ -13,6 +13,13 @@ class UsersTableSeeder extends Seeder
             'password' => bcrypt('asdasd'),
         ]);
 
+        factory(\App\Models\User::class)->create([
+            'first_name' => 'Tigran',
+            'last_name' => 'Gevorgyan',
+            'email' => 'tigran@gmail.com',
+            'password' => bcrypt('asdasd'),
+        ]);
+
         factory(\App\Models\User::class, rand(10, 20))->create([
 
         ]);

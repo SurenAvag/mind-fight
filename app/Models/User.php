@@ -10,6 +10,7 @@ class User extends Authenticatable
 {
     use Notifiable;
 
+    const NORM_POINT = 700;
     const TYPES = [
         'student'   => 1,
         'lecturer'  => 2
@@ -51,5 +52,10 @@ class User extends Authenticatable
     public function logout()
     {
         $this->updateToken();
+    }
+
+    public function getPointCoefficientAttribute()
+    {
+        return self::NORM_POINT / $this->point;
     }
 }

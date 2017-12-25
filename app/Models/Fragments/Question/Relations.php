@@ -4,6 +4,7 @@ namespace App\Models\Fragments\Question;
 
 use App\Models\Answer;
 use App\Models\Subject;
+use App\Models\Topic;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -23,5 +24,10 @@ trait Relations
     public function subject(): BelongsTo
     {
         return $this->belongsTo(Subject::class);
+    }
+
+    public function topic(): BelongsTo
+    {
+        return $this->belongsTo(Topic::class);
     }
 }

@@ -25,5 +25,8 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::resource('question', 'QuestionController', ['except' => ['create', 'edit']]);
         Route::resource('answer', 'AnswerController', ['except' => ['index', 'create', 'edit']]);
         Route::resource('user', 'UserController', ['except' => ['create', 'edit']]);
+
+        Route::get('game', 'GameController@getGame');
+        Route::post('game/{game}/end', 'GameController@endGame');
     });
 });
