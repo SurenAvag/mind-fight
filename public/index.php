@@ -54,7 +54,11 @@ $kernel = $app->make(Illuminate\Contracts\Http\Kernel::class);
 $response = $kernel->handle(
     $request = Illuminate\Http\Request::capture()
 );
-
+if (strpos($request->getRequestUri(), 'api/v1') !== false) {// add headers except api-docs
+    $response->headers->set('Access-Control-Allow-Origin', '*');
+    $response->headers->set('Access-Control-Allow-Methods', 'GET, POST, PATCH, PUT, DELETE, OPTIONS');
+    $response->headers->set('Access-Control-Allow-Headers', 'Origin, Content-Type, Authorization, access-control-allow-origin, X-XSRF-TOKEN ');
+}
 $response->send();
 
 $kernel->terminate($request, $response);

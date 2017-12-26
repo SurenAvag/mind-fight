@@ -31,7 +31,8 @@ class AnswerTransformer extends Transformer
     public function simpleTransform(Model $item): array
     {
         return [
-            'text'              => $item->text,
+            'id'                => $item->id,
+            'text'              => $item->text . $item->id,
             'question_id'       => $item->question_id,
             'is_true_answer'    => $item->is_true_answer
         ];

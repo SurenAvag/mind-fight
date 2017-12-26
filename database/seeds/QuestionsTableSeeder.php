@@ -11,14 +11,10 @@ class QuestionsTableSeeder extends Seeder
      */
     public function run()
     {
-        $faker = Faker\Factory::create();
-
-        foreach (range(1, 10) as $index) {
-            \App\Models\Question::create([
-                'text'              => $faker->text(50),
-                'subject_id'        => \App\Models\Subject::inRandomOrder()->first()->id,
-                'topic_id'          => \App\Models\Topic::inRandomOrder()->first()->id,
-                'level'             => array_random(\App\Models\Question::LEVELS),
+        foreach (\App\Models\Topic::all() as $topic) {
+            factory(\App\Models\Question::class, rand(3, 5))->create([
+                'subject_id' => $topic->subject_id,
+                'topic_id' => $topic->id,
             ]);
         }
     }

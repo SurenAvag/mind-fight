@@ -8,5 +8,9 @@ class Game extends BaseModel
 {
     use Relations;
 
-    public $timestamps = false;
+
+    public function getTimeAttribute()
+    {
+        return $this->questions->sum('time');
+    }
 }

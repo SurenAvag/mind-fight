@@ -21,6 +21,7 @@ class CreateUsersTable extends Migration
             $table->integer('type')->default(1)->comment('1=>student,2=>lecturer');
             $table->string('email')->unique();
             $table->string('password');
+            $table->string('api_token')->nullable();
             $table->integer('point')->nullable();
             $table->rememberToken();
             $table->timestamps();

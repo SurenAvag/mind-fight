@@ -14,6 +14,19 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
-    Route::resource('question', 'QuestionController', ['except' => ['create', 'edit']]);
-    Route::resource('answer', 'AnswerController', ['except' => ['index', 'create', 'edit']]);
+
+    Route::post('login', 'AuthController@login');
+
+    Route::group(['middleware' => ['auth:api']], function () {
+
+        Route::get('me', 'AuthController@me');
+        Route::post('logout', 'AuthController@logout');
+
+        Route::resource('question', 'QuestionController', ['except' => ['create', 'edit']]);
+        Route::resource('answer', 'AnswerController', ['except' => ['index', 'create', 'edit']]);
+        Route::resource('user', 'UserController', ['except' => ['create', 'edit']]);
+
+        Route::get('game', 'GameController@getGame');
+        Route::post('game/{game}/end', 'GameController@endGame');
+    });
 });
