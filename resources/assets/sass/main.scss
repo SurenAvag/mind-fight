@@ -1,0 +1,28 @@
+.graph-container {
+    margin: 30px;
+    .graph-title{
+        margin-top: 25px;
+    }
+    .graph-matrix{
+        display: flex;
+        flex-direction: column;
+        .matrix {
+            margin: 15px;
+            display: flex;
+            flex-direction: column;
+            .row{
+                display: flex;
+                .row-item{
+                    min-height: 30px;
+                    min-width: 100px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                }
+            }
+        }
+    }
+    .graph-graphical{
+
+    }
+}

@@ -2,10 +2,15 @@
 
 namespace App\Models;
 
+use App\Graphs\DirectedGraph;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Auth;
 
+/**
+ * @property mixed answeredQuestions
+ * @property mixed point
+ */
 class User extends Authenticatable
 {
     use Notifiable;
@@ -57,5 +62,22 @@ class User extends Authenticatable
     public function getPointCoefficientAttribute()
     {
         return self::NORM_POINT / $this->point;
+    }
+
+    public function answeredQuestions()
+    {
+        return $this->belongsToMany(Question::class);
+    }
+
+    public function getAnsweredQuestionsKeyWordsGraph()
+    {
+        $graphs = [];
+
+        foreach ($this->answeredQuestions as $question) {
+
+            $graphs []= $question->asGraph();
+        }
+
+        return DirectedGraph::union(...$graphs);
     }
 }
