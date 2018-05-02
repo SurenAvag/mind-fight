@@ -52,8 +52,12 @@ class EndGameRequest extends BaseRequest
 
         foreach ($this->questions as $question){
             if($question->trueAnswer->id == $this->answers[$question->id]){
+
+                Auth::user()->answeredQuestion()->syncWithoutDetaching($question->id);
+
                 $trueAnswers++;
                 $this->points += $this->getQuestionPoint($question);
+
             }
         }
 
@@ -88,7 +92,7 @@ class EndGameRequest extends BaseRequest
 
         $point *= Auth::user()->pointCoefficient;
 
-        $point += $this->point  *$this->endTime->diffInMinutes($this->game->created_at) * Question::MINUTE_COEFFICIENT;
+        $point += $this->point  * $this->endTime->diffInMinutes($this->game->created_at) * Question::MINUTE_COEFFICIENT;
 
         return $point;
     }
