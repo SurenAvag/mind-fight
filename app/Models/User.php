@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Graphs\DirectedGraph;
+use App\Graphs\Graph;
+use App\Graphs\Interfaces\GraphContract;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Auth;
@@ -21,11 +23,8 @@ class User extends Authenticatable
         'lecturer'  => 2
     ];
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
+    private $usedKeyWordsGraph;
+
     protected $fillable = [
         'id',
         'first_name',
@@ -69,7 +68,7 @@ class User extends Authenticatable
         return $this->belongsToMany(Question::class);
     }
 
-    public function getAnsweredQuestionsKeyWordsGraph()
+    public function getAnsweredQuestionsKeyWordsGraph(): GraphContract
     {
         $graphs = [];
 
@@ -79,5 +78,46 @@ class User extends Authenticatable
         }
 
         return DirectedGraph::union(...$graphs);
+    }
+
+    public function getNotUsedKeyWordsAsGraph()
+    {
+        $usedKeyWordsGraph = $this->getAnsweredQuestionsKeyWordsGraph();
+
+        $subjectKeyWordsGraph = (new Subject())->getQuestionsAsGraph();
+
+        $graphDiff = DirectedGraph::diff($subjectKeyWordsGraph, $usedKeyWordsGraph);
+
+        $this->usedKeyWordsGraph = $usedKeyWordsGraph;
+
+        return $graphDiff;
+    }
+
+    private function removeDependedKeyWordsFromGraph($graph): GraphContract
+    {
+        $graph->removeDependedNodes($this->usedKeyWordsGraph);
+    }
+
+    public function analyzeKeyWords(bool $strict = false)
+    {
+        $graph = $this->getNotUsedKeyWordsAsGraph();
+
+        if($graph->isEmpty()){
+            return true;
+        }
+
+        if($strict){
+
+            return $graph->asGraphicData();
+        }
+
+        $newGraph = $this->removeDependedKeyWordsFromGraph($graph);
+
+        if($newGraph->isEmpty()){
+
+            return true;
+        }
+
+        return $newGraph->asGraphicData();
     }
 }

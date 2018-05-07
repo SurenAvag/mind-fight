@@ -22,7 +22,7 @@ class Graph implements GraphContract
         $this->setLines(...$lines);
     }
 
-    public static function union(GraphContract ...$graphs)
+    public static function union(GraphContract ...$graphs): GraphContract
     {
         $unionGraph = new static();
 
@@ -33,6 +33,27 @@ class Graph implements GraphContract
         }
 
         return $unionGraph;
+    }
+
+    public static function diff(GraphContract $baseGraph, GraphContract $subGraph): GraphContract
+    {
+        $diffGraph = new static();
+
+        $diffGraph->setLines($baseGraph->diffLines(...$subGraph->getLines()));
+
+        $diffGraph->setNodes($baseGraph->diffNodes($subGraph->getNodes()));
+
+        return $diffGraph;
+    }
+
+    public function isEmpty(): bool
+    {
+        return count($this->nodes) === 0;
+    }
+
+    public function removeDependedNodes(GraphContract $graph): GraphContract
+    {
+        return $graph;
     }
 
     public function asMatrix(): array
