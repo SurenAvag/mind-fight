@@ -18,6 +18,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
 
         Route::get('game', 'GameController@getGame');
         Route::post('game/{game}/end', 'GameController@endGame');
+        Route::post('game/{game}/join', 'GameController@joinToGame');
 
         Route::get('get-key-words-graph', 'GraphController@getKeyWordsGraph');
     });

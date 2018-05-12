@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Events\GameCreated;
 use App\Models\Fragments\Game\Getters;
 use App\Models\Fragments\Game\Relations;
 
@@ -20,7 +21,12 @@ class Game extends BaseModel
     protected $fillable = [
         'winner_id',
         'loser_id',
-        'for_two_player'
+        'for_two_player',
+        'subject_id'
+    ];
+
+    protected $dispatchesEvents = [
+        'created' => GameCreated::class
     ];
 
     public function isFinished(): bool
@@ -87,6 +93,7 @@ class Game extends BaseModel
                 $loser = $secondUser;
             }
         }
+
         return [
             'winner'    => $winner,
             'loser'     => $loser

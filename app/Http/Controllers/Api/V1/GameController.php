@@ -5,10 +5,9 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\DataProviders\GameDataProvider;
 use App\Http\Requests\Game\EndGameRequest;
 use App\Http\Requests\Game\GetGameRequest;
+use App\Http\Requests\Game\JoinToGameRequest;
 use App\Models\Game;
 use App\Transformers\GameTransformer;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 
 class GameController extends ApiController
 {
@@ -23,8 +22,11 @@ class GameController extends ApiController
 
     public function endGame(EndGameRequest $request, Game $game)
     {
-        return $this->successResponse([
-            'points' => $request->endGame()->getMessage(),
-        ]);
+        return $this->successResponse($request->endGame()->getMessage());
+    }
+
+    public function joinToGame(JoinToGameRequest $request, Game $game)
+    {
+        return $this->successResponse($request->joinToGame()->getMessage());
     }
 }

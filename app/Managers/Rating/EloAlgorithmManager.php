@@ -10,16 +10,16 @@ class EloAlgorithmManager
     //Հաղթած խաղացողի վաստակած միավորը
     public static function getRatingForWinner(User $winner, User $loser): float
     {
-        return round((1 - $winner->getProbabilityOfVictory($loser))
+        return (1 - $winner->getProbabilityOfVictory($loser))
             * $winner->getRatingGrowthCoefficient()
-            * Game::getPointForGame(), 2);
+            * Game::getPointForGame();
     }
 
     //Պարտված խաղաողի կորցրած միավորը
     public static function getRatingForLoser(User $loser, User $winner): float
     {
-        return round($loser->getProbabilityOfVictory($winner)
+        return $loser->getProbabilityOfVictory($winner)
             * $loser->getRatingGrowthCoefficient()
-            * Game::getPointForGame(), 2);
+            * Game::getPointForGame();
     }
 }

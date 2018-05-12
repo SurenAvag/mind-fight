@@ -20,11 +20,11 @@ class EndGameRequest extends BaseRequest
     private $loser;
     private $winnerRatingChanges;
     private $loserRatingChanges;
+    private $gameIsFinished;
 
     public function authorize()
     {
-        return true;
-//        return !$this->game->isFinished();
+        return !$this->game->isFinished();
     }
 
     public function rules()
@@ -39,7 +39,7 @@ class EndGameRequest extends BaseRequest
     {
         $this->updatePivotTableValues($this->getTrueAnswersCount());
 
-        if ($this->game->isFinished()) {
+        if ($this->gameIsFinished = $this->game->isFinished()) {
             $this->initializePlayerRoles();
 
             if ($this->checkIfRolesDivided()) {
@@ -144,14 +144,38 @@ class EndGameRequest extends BaseRequest
     public function getMessage()
     {
         if ($this->game->for_two_player) {
+            if ($this->gameIsFinished) {
+                return [
+                    'gameIsFinished'    => $this->gameIsFinished,
+                    'gameForTwoPlayer'  => true,
+                    'winnerUser'        => $this->game->winner,
+                    'winnerPoint'       => $this->winnerRatingChanges,
+                    'loserUser'         => $this->game->loser,
+                    'loserPoint'        => $this->loserRatingChanges,
+                ];
+            }
 
-            return "Your game is finished.";
+            return [
+                'gameIsFinished'    => $this->gameIsFinished,
+                'gameForTwoPlayer'  => true,
+            ];
+
         } else {
             if ($this->winner) {
-
-                return "Your game is ended. You win. You earn $this->winnerRatingChanges points.";
+                return [
+                    'gameIsFinished'    => $this->gameIsFinished,
+                    'gameForTwoPlayer'  => false,
+                    'isWin'             => true,
+                    'points'            => $this->winnerRatingChanges
+                ];
             }
-            return "Your game is ended. You lose. You lose $this->winnerRatingChanges points.";
+
+            return [
+                'gameIsFinished'    => $this->gameIsFinished,
+                'gameForTwoPlayer'  => false,
+                'isWin'             => false,
+                'points'            => $this->winnerRatingChanges
+            ];
         }
     }
 }
