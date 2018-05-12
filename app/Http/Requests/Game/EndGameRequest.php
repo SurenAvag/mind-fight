@@ -18,10 +18,13 @@ class EndGameRequest extends BaseRequest
 {
     private $winner;
     private $loser;
+    private $winnerRatingChanges;
+    private $loserRatingChanges;
 
     public function authorize()
     {
-        return !$this->game->isFinished();
+        return true;
+//        return !$this->game->isFinished();
     }
 
     public function rules()
@@ -92,30 +95,30 @@ class EndGameRequest extends BaseRequest
 
     private function updatePlayersRating(): void
     {
-        $winnerRatingChanges = EloAlgorithmManager::getRatingForWinner(
+        $this->winnerRatingChanges = EloAlgorithmManager::getRatingForWinner(
             $this->winner ?? $this->loser, $this->loser ?? $this->winner
         );
-        $loserRatingChanges = EloAlgorithmManager::getRatingForLoser(
+        $this->loserRatingChanges = EloAlgorithmManager::getRatingForLoser(
             $this->loser ?? $this->winner, $this->winner ?? $this->loser
         );
 
         if ($this->winner) {
-            $this->winner->increment('rating', $winnerRatingChanges);
+            $this->winner->increment('rating', $this->winnerRatingChanges);
         }
         if ($this->loser) {
-            $this->loser->decrement('rating', $loserRatingChanges);
+            $this->loser->decrement('rating', $this->loserRatingChanges);
         }
 
-        $this->updatePivotTableRatingChangesAttribute($winnerRatingChanges, $loserRatingChanges);
+        $this->updatePivotTableRatingChangesAttribute();
     }
 
-    private function updatePivotTableRatingChangesAttribute(float $winnerRatingChanges, float $loserRatingChanges): void
+    private function updatePivotTableRatingChangesAttribute(): void
     {
         if ($this->winner) {
             DB::table('game_users')->where('game_id', $this->game->id)
                 ->where('user_id', $this->winner->id)
                 ->update([
-                    'rating_changes' => $winnerRatingChanges
+                    'rating_changes' => $this->winnerRatingChanges
                 ]);
         }
 
@@ -123,7 +126,7 @@ class EndGameRequest extends BaseRequest
             DB::table('game_users')->where('game_id', $this->game->id)
                 ->where('user_id', $this->loser->id)
                 ->update([
-                    'rating_changes' => -$loserRatingChanges
+                    'rating_changes' => -$this->loserRatingChanges
                 ]);
         }
     }
@@ -138,8 +141,17 @@ class EndGameRequest extends BaseRequest
             ]);
     }
 
-    public function getPoints()
+    public function getMessage()
     {
-        return Auth::user()->fresh()->rating;
+        if ($this->game->for_two_player) {
+
+            return "Your game is finished.";
+        } else {
+            if ($this->winner) {
+
+                return "Your game is ended. You win. You earn $this->winnerRatingChanges points.";
+            }
+            return "Your game is ended. You lose. You lose $this->winnerRatingChanges points.";
+        }
     }
 }

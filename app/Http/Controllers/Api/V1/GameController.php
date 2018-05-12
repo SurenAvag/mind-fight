@@ -24,7 +24,7 @@ class GameController extends ApiController
     public function endGame(EndGameRequest $request, Game $game)
     {
         return $this->successResponse([
-            'points' => $request->endGame()->getPoints(),
+            'points' => $request->endGame()->getMessage(),
         ]);
     }
 }
