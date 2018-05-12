@@ -12,6 +12,8 @@ class GameDataProvider
 
     public function prepareData(int $subjectId, bool $forTwoPlayer)
     {
+        DB::statement("SET sql_mode = ''");
+
         $questionIds = $this->getRandomQuestionIds($subjectId);
 
         $this->game = Game::create([

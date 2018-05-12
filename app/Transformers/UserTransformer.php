@@ -19,7 +19,7 @@ class UserTransformer extends Transformer
         return array_merge($this->simpleTransform($item), [
             'firstName'  => $item->first_name,
             'lastName'  => $item->last_name,
-            'point'  => $item->point,
+            'point'  => $item->rating,
             'type'  => $item->type,
         ]);
     }
@@ -36,7 +36,7 @@ class UserTransformer extends Transformer
         return array_merge($this->simpleTransform($item), [
             'firstName'  => $item->first_name,
             'lastName'  => $item->last_name,
-            'point'  => $item->point,
+            'point'  => $item->rating,
             'type'  => $item->type,
         ]);
     }

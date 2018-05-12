@@ -28,7 +28,7 @@ class EndGameRequest extends BaseRequest
     {
         return [
             'answers'   => 'required|array',
-            'answers.*' => 'integer|exists:answers,id'
+            'answers.*' => 'integer|exists:answers,id|nullable'
         ];
     }
 
@@ -63,6 +63,9 @@ class EndGameRequest extends BaseRequest
 
         foreach ($this->getGameQuestions() as $question) {
             if($question->trueAnswer->id == $this->answers[$question->id]){
+
+                Auth::user()->answeredQuestions()->syncWithoutDetaching($question->id);
+
                 $trueAnswersCount ++;
             }
         }
@@ -72,7 +75,7 @@ class EndGameRequest extends BaseRequest
 
     private function getGameQuestions()
     {
-        return Question::with('trueAnswer')->find(array_keys($this->answers));
+        return Question::with('trueAnswer')->find(array_filter(array_keys($this->answers)));
     }
 
     private function initializePlayerRoles(): void
