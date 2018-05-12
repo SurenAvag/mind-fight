@@ -12,6 +12,10 @@ class Subject extends BaseModel
 {
     public $timestamps = false;
 
+    protected $fillable = [
+        'name'
+    ];
+
     public function topics()
     {
         return $this->hasMany(Topic::class);
@@ -21,7 +25,6 @@ class Subject extends BaseModel
     {
         return $this->hasMany(Question::class);
     }
-
 
     public function getQuestionsAsGraph(): DirectedGraph
     {

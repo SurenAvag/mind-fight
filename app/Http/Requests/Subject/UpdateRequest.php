@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Http\Requests\Question;
+namespace App\Http\Requests\Subject;
 
-use App\Models\Question;
 use Illuminate\Foundation\Http\FormRequest;
 
 /**
- * @property mixed question
+ * @property mixed subject
  */
 class UpdateRequest extends FormRequest
 {
@@ -18,13 +17,13 @@ class UpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'name' => 'sometimes|required'
         ];
     }
 
-    public function persist(): self
+    public function persist()
     {
-        $this->question->update(
+        $this->subject->update(
             $this->getProcessedData()
         );
 
@@ -38,8 +37,8 @@ class UpdateRequest extends FormRequest
         ]);
     }
 
-    public function getQuestion(): Question
+    public function getSubject()
     {
-        return $this->question;
+        return $this->subject;
     }
 }
