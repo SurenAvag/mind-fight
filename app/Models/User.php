@@ -14,6 +14,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * @property mixed pivot
  * @property mixed answeredQuestions
  * @property mixed point
+ * @property mixed last_name
+ * @property mixed first_name
  */
 class User extends Authenticatable
 {

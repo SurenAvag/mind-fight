@@ -4,10 +4,12 @@ namespace App\Events;
 
 use App\Models\Game;
 use App\Transformers\GameTransformer;
+use App\Transformers\UserTransformer;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Support\Facades\Auth;
 
 class GameCreated implements ShouldBroadcast
 {
@@ -28,7 +30,8 @@ class GameCreated implements ShouldBroadcast
     public function broadcastWith()
     {
         return [
-            'game' => GameTransformer::simple($this->game->load('users')),
+            'game'  => GameTransformer::simple(),
+            'user'  => UserTransformer::forBroadcast(Auth::user())
         ];
     }
 }

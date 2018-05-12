@@ -2,6 +2,7 @@
 
 namespace App\Transformers;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 
 class UserTransformer extends Transformer
@@ -38,6 +39,15 @@ class UserTransformer extends Transformer
             'lastName'  => $item->last_name,
             'point'  => $item->rating,
             'type'  => $item->type,
+        ]);
+    }
+
+    public function forBroadcastTransform(User $user): array
+    {
+        return array_merge($this->simpleTransform($user), [
+            'firstName' => $user->first_name,
+            'lastName'  => $user->last_name,
+            'point'     => $user->rating,
         ]);
     }
 }
