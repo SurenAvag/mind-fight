@@ -21,3 +21,9 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::group(['namespace' => 'Web'], function () {
+
+    Route::get('/get-key-words-graph', 'GraphController@getKeyWordsGraph')->name('getKeyWordsGraph')->middleware('auth:api');
+});
+

@@ -4,13 +4,16 @@ namespace App\Models;
 
 use App\Models\Fragments\User\Getters;
 use App\Models\Fragments\User\Relations;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use App\Graphs\DirectedGraph;
+use App\Graphs\Interfaces\GraphContract;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 /**
  * @property mixed rating
  * @property mixed pivot
+ * @property mixed answeredQuestions
+ * @property mixed point
  */
 class User extends Authenticatable
 {
@@ -23,6 +26,8 @@ class User extends Authenticatable
         'student'   => 1,
         'lecturer'  => 2
     ];
+
+    private $usedKeyWordsGraph;
 
     protected $fillable = [
         'id',
@@ -50,5 +55,68 @@ class User extends Authenticatable
     public function logout()
     {
         $this->updateToken();
+    }
+
+    public function getPointCoefficientAttribute()
+    {
+        return self::NORM_POINT / $this->point;
+    }
+
+    public function answeredQuestions()
+    {
+        return $this->belongsToMany(Question::class);
+    }
+
+    public function getAnsweredQuestionsKeyWordsGraph(): GraphContract
+    {
+        $graphs = [];
+
+        foreach ($this->answeredQuestions as $question) {
+
+            $graphs []= $question->asGraph();
+        }
+
+        return DirectedGraph::union(...$graphs);
+    }
+
+    public function getNotUsedKeyWordsAsGraph()
+    {
+        $usedKeyWordsGraph = $this->getAnsweredQuestionsKeyWordsGraph();
+
+        $subjectKeyWordsGraph = (new Subject())->getQuestionsAsGraph();
+
+        $graphDiff = DirectedGraph::diff($subjectKeyWordsGraph, $usedKeyWordsGraph);
+
+        $this->usedKeyWordsGraph = $usedKeyWordsGraph;
+
+        return $graphDiff;
+    }
+
+    private function removeDependedKeyWordsFromGraph($graph): GraphContract
+    {
+        $graph->removeDependedNodes($this->usedKeyWordsGraph);
+    }
+
+    public function analyzeKeyWords(bool $strict = false)
+    {
+        $graph = $this->getNotUsedKeyWordsAsGraph();
+
+        if($graph->isEmpty()){
+            return true;
+        }
+
+        if($strict){
+
+            return $graph->asGraphicData();
+        }
+
+        $newGraph = $this->removeDependedKeyWordsFromGraph($graph);
+
+        if($newGraph->isEmpty()){
+
+            return true;
+        }
+
+        return $newGraph->asGraphicData();
     }
 }

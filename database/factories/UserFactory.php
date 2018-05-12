@@ -62,7 +62,7 @@ $factory->define(App\Models\Question::class, function (Faker $faker) {
     ];
 });
 
-$factory->define(App\Models\KeyWords::class, function (Faker $faker) {
+$factory->define(App\Models\KeyWord::class, function (Faker $faker) {
 
     return [
         'name'          => $faker->word,
