@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\DataProviders\GameDataProvider;
 use App\Http\Requests\Game\EndGameRequest;
+use App\Http\Requests\Game\GetGameById;
 use App\Http\Requests\Game\GetGameRequest;
 use App\Http\Requests\Game\JoinToGameRequest;
 use App\Models\Game;
@@ -17,6 +18,13 @@ class GameController extends ApiController
             GameTransformer::show(
                 $dataProvider->prepareData($request->subjectId, $request->forTwoPlayer)->getGame()
             )
+        );
+    }
+
+    public function getGameById(GetGameById $request, Game $game)
+    {
+        return $this->successResponse(
+            GameTransformer::show($game)
         );
     }
 
