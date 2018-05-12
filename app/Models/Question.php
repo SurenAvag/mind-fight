@@ -9,11 +9,13 @@ use App\Models\Fragments\Question\Relations;
 use Illuminate\Database\Eloquent\Collection;
 
 /**
+ * @property mixed level
  * @property mixed text
  */
 class Question extends BaseModel
 {
     use Relations;
+
     const POINT = 3;
     const MINUTE_COEFFICIENT = 0.05;
 

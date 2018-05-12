@@ -12,9 +12,9 @@ class QuestionsTableSeeder extends Seeder
     public function run()
     {
         foreach (\App\Models\Topic::all() as $topic) {
-            factory(\App\Models\Question::class, rand(3, 5))->create([
-                'subject_id' => $topic->subject_id,
-                'topic_id' => $topic->id,
+            factory(\App\Models\Question::class, rand(10, 15))->create([
+                'subject_id'    => $topic->subject_id,
+                'topic_id'      => $topic->id,
             ]);
         }
     }

@@ -3,98 +3,140 @@
 namespace App\Http\Requests\Game;
 
 use App\Http\Requests\BaseRequest;
+use App\Managers\Rating\EloAlgorithmManager;
 use App\Models\Question;
 use Carbon\Carbon;
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 /**
  * @property mixed answers
  * @property mixed game
- * @property static endTime
+ * @property mixed endTime
  */
 class EndGameRequest extends BaseRequest
 {
-    private $questions;
-    private $points;
+    private $winner;
+    private $loser;
 
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
     public function authorize()
     {
-        return true;
+        return !$this->game->isFinished();
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
     public function rules()
     {
         return [
-
+            'answers'   => 'required|array',
+            'answers.*' => 'integer|exists:answers,id'
         ];
     }
 
     public function endGame()
     {
-        $this->endTime = Carbon::now();
+        $this->updatePivotTableValues($this->getTrueAnswersCount());
 
-        $this->filterAnswers();
+        if ($this->game->isFinished()) {
+            $this->initializePlayerRoles();
 
-        $this->questions = Question::with('trueAnswer')->find(array_keys($this->answers));
-
-        $trueAnswers = 0;
-
-        foreach ($this->questions as $question){
-            if($question->trueAnswer->id == $this->answers[$question->id]){
-
-                Auth::user()->answeredQuestion()->syncWithoutDetaching($question->id);
-
-                $trueAnswers++;
-                $this->points += $this->getQuestionPoint($question);
-
+            if ($this->checkIfRolesDivided()) {
+                $this->updatePlayersRating();
             }
+
+            $this->updateGame();
         }
-
-
-        if($this->game->questions->count() > $trueAnswers * 2){
-            $this->points = 0;
-        }
-
-        Auth::user()->update(['point' => Auth::user()->point + ($this->points = (int)$this->points)]);
 
         return $this;
     }
 
-    /**
-     * @return mixed
-     */
+    private function updateGame(): void
+    {
+        $this->game->update([
+            'winner_id'     => $this->winner ? $this->winner->id : null,
+            'loser_id'      => $this->loser ? $this->loser->id : null,
+        ]);
+    }
+
+    private function getTrueAnswersCount(): int
+    {
+        $trueAnswersCount = 0;
+
+        foreach ($this->getGameQuestions() as $question) {
+            if($question->trueAnswer->id == $this->answers[$question->id]){
+                $trueAnswersCount ++;
+            }
+        }
+
+        return $trueAnswersCount;
+    }
+
+    private function getGameQuestions()
+    {
+        return Question::with('trueAnswer')->find(array_keys($this->answers));
+    }
+
+    private function initializePlayerRoles(): void
+    {
+        $playedUsers = $this->game->decideWinnerAndLoser();
+        $this->winner = $playedUsers['winner'];
+        $this->loser = $playedUsers['loser'];
+    }
+
+    private function checkIfRolesDivided(): bool
+    {
+        return (is_null($this->winner) && is_null($this->loser)) ? false : true;
+    }
+
+    private function updatePlayersRating(): void
+    {
+        $winnerRatingChanges = EloAlgorithmManager::getRatingForWinner(
+            $this->winner ?? $this->loser, $this->loser ?? $this->winner
+        );
+        $loserRatingChanges = EloAlgorithmManager::getRatingForLoser(
+            $this->loser ?? $this->winner, $this->winner ?? $this->loser
+        );
+
+        if ($this->winner) {
+            $this->winner->increment('rating', $winnerRatingChanges);
+        }
+        if ($this->loser) {
+            $this->loser->decrement('rating', $loserRatingChanges);
+        }
+
+        $this->updatePivotTableRatingChangesAttribute($winnerRatingChanges, $loserRatingChanges);
+    }
+
+    private function updatePivotTableRatingChangesAttribute(float $winnerRatingChanges, float $loserRatingChanges): void
+    {
+        if ($this->winner) {
+            DB::table('game_users')->where('game_id', $this->game->id)
+                ->where('user_id', $this->winner->id)
+                ->update([
+                    'rating_changes' => $winnerRatingChanges
+                ]);
+        }
+
+        if ($this->loser) {
+            DB::table('game_users')->where('game_id', $this->game->id)
+                ->where('user_id', $this->loser->id)
+                ->update([
+                    'rating_changes' => -$loserRatingChanges
+                ]);
+        }
+    }
+
+    private function updatePivotTableValues(int $trueAnswersCount): void
+    {
+        DB::table('game_users')->where('game_id', $this->game->id)
+            ->where('user_id', Auth::id())
+            ->update([
+                'true_answers_count'    => $trueAnswersCount,
+                'finished_date'         => Carbon::now()->toDateTimeString()
+            ]);
+    }
+
     public function getPoints()
     {
-        return $this->points;
+        return Auth::user()->fresh()->rating;
     }
-
-    private function filterAnswers()
-    {
-        $this->answers = array_filter($this->answers, function ($val){
-            return $val != 'null' && $val;
-        });
-    }
-
-    private function getQuestionPoint(Question $question)
-    {
-        $point = Question::POINT * Question::LEVEL_COEFFICIENT[$question->level];
-
-        $point *= Auth::user()->pointCoefficient;
-
-        $point += $this->point  * $this->endTime->diffInMinutes($this->game->created_at) * Question::MINUTE_COEFFICIENT;
-
-        return $point;
-    }
-
 }

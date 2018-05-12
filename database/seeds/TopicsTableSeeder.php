@@ -11,8 +11,10 @@ class TopicsTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(\App\Models\Topic::class, 6)->create([
-            'subject_id'    => \App\Models\Subject::inRandomOrder()->first()->id,
-        ]);
+        foreach (\App\Models\Subject::all() as $subject) {
+            factory(\App\Models\Topic::class, 5)->create([
+                'subject_id' => $subject->id,
+            ]);
+        }
     }
 }

@@ -22,7 +22,7 @@ $factory->define(App\Models\User::class, function (Faker $faker) {
         'type'              => rand(1, 2),
         'email'             => $faker->email,
         'password'          => bcrypt('asdasd'),
-        'point'             => rand(100, 1000),
+        'rating'            => rand(100, 1000),
         'remember_token'    => str_random(10),
         'api_token'    => str_random(50),
     ];

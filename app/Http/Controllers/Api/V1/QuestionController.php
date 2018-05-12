@@ -8,10 +8,10 @@ use App\Http\Requests\Question\IndexRequest;
 use App\Http\Requests\Question\ShowRequest;
 use App\Http\Requests\Question\StoreRequest;
 use App\Http\Requests\Question\UpdateRequest;
+use App\Models\Game;
 use App\Models\Question;
 use App\Transformers\QuestionTransformer;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 class QuestionController extends ApiController
 {

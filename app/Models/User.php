@@ -2,20 +2,24 @@
 
 namespace App\Models;
 
+use App\Models\Fragments\User\Getters;
+use App\Models\Fragments\User\Relations;
 use App\Graphs\DirectedGraph;
-use App\Graphs\Graph;
 use App\Graphs\Interfaces\GraphContract;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Support\Facades\Auth;
 
 /**
+ * @property mixed rating
+ * @property mixed pivot
  * @property mixed answeredQuestions
  * @property mixed point
  */
 class User extends Authenticatable
 {
-    use Notifiable;
+    use Notifiable, Getters, Relations;
+
+    const NORMAL_EXPERIENCE = 400;
 
     const NORM_POINT = 700;
     const TYPES = [
@@ -32,15 +36,10 @@ class User extends Authenticatable
         'type',
         'email',
         'password',
-        'point',
+        'rating',
         'api_token'
     ];
 
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
     protected $hidden = [
         'password',
         'remember_token',

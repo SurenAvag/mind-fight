@@ -6,6 +6,11 @@ use App\Models\Answer;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
+/**
+ * @property mixed is_true_answer
+ * @property mixed question_id
+ * @property mixed text
+ */
 class StoreRequest extends FormRequest
 {
     private $answer;
@@ -26,6 +31,11 @@ class StoreRequest extends FormRequest
 
     public function persist(): self
     {
+        Answer::create([
+            'text'              => $this->text,
+            'question_id'       => $this->question_id,
+            'is_true_answer'    => $this->is_true_answer
+        ]);
         $this->answer = Answer::create(
             $this->getProcessedData()
         );

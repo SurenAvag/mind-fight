@@ -21,8 +21,14 @@ class CreateGamesTable extends Migration
             $table->unsignedInteger('winner_id')->nullable();
             $table->foreign('winner_id')->references('id')->on('users')->onDelete('cascade');
 
+            $table->unsignedInteger('loser_id')->nullable();
+            $table->foreign('loser_id')->references('id')->on('users')->onDelete('cascade');
+
             $table->unsignedInteger('subject_id')->nullable();
             $table->foreign('subject_id')->references('id')->on('subjects')->onDelete('cascade');
+
+            $table->boolean('for_two_player')->default(false);
+
             $table->timestamps();
         });
         Schema::enableForeignKeyConstraints();

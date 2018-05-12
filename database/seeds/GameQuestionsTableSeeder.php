@@ -11,13 +11,13 @@ class GameQuestionsTableSeeder extends Seeder
      */
     public function run()
     {
-        foreach (range(1, 10) as $index) {
-            $game = \App\Models\Game::inRandomOrder()->first();
-            $i = 0;
-            while ($i < 4) {
-                $game->questions()->syncWithoutDetaching(\App\Models\Question::inRandomOrder()->first());
-                $i ++;
-            }
+        foreach (\App\Models\Game::all() as $game) {
+            $game->questions()->syncWithoutDetaching(
+                \App\Models\Question::inRandomOrder()
+                    ->where('subject_id', \App\Models\Subject::inRandomOrder()->first()->id)
+                    ->limit(4)
+                    ->get()
+            );
         }
     }
 }

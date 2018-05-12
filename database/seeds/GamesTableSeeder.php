@@ -4,19 +4,24 @@ use Illuminate\Database\Seeder;
 
 class GamesTableSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
     public function run()
     {
         $faker = Faker\Factory::create();
 
-        foreach (range(1, 50) as $index) {
+        foreach (range(1, 10) as $index) {
             \App\Models\Game::create([
-                'name'          => $faker->name,
+                'name'          => $faker->word,
                 'winner_id'     => \App\Models\User::inRandomOrder()->first()->id,
+                'subject_id'    => \App\Models\Subject::inRandomOrder()->first()->id
+            ]);
+        }
+
+        foreach (range(1, 10) as $index) {
+            \App\Models\Game::create([
+                'name'              => $faker->word,
+                'for_two_player'    => true,
+                'winner_id'         => $winnerId = \App\Models\User::inRandomOrder()->first()->id,
+                'loser_id'          => \App\Models\User::inRandomOrder()->where('id', '!=', $winnerId)->first()->id,
                 'subject_id'    => \App\Models\Subject::inRandomOrder()->first()->id
             ]);
         }

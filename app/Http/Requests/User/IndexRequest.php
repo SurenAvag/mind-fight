@@ -34,7 +34,7 @@ class IndexRequest extends BaseRequest
 
     public function prepareData()
     {
-        $this->users = User::orderBy('point', 'desc')->paginate(100);
+        $this->users = User::orderBy('rating', 'desc')->paginate(100);
 
         return $this;
     }

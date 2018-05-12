@@ -16,13 +16,19 @@ class CreateUsersTable extends Migration
         Schema::disableForeignKeyConstraints();
         Schema::create('users', function (Blueprint $table) {
             $table->increments('id');
+
             $table->string('first_name');
             $table->string('last_name')->nullable();
+
             $table->integer('type')->default(1)->comment('1=>student,2=>lecturer');
+
             $table->string('email')->unique();
             $table->string('password');
+
             $table->string('api_token')->nullable();
-            $table->integer('point')->nullable();
+
+            $table->integer('rating')->nullable();
+
             $table->rememberToken();
             $table->timestamps();
         });
