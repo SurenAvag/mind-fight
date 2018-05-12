@@ -30,7 +30,7 @@ class GameCreated implements ShouldBroadcast
     public function broadcastWith()
     {
         return [
-            'game'  => GameTransformer::simple(),
+            'game'  => GameTransformer::simple($this->game),
             'user'  => UserTransformer::forBroadcast(Auth::user())
         ];
     }

@@ -19,7 +19,8 @@ class GameTransformer extends Transformer
         return array_merge($this->simpleTransform($game), [
             'questions'     => QuestionTransformer::collection($game->questions, 'showTransform'),
             'time'          => $game->questions->sum('time'),
-            'forTwoPlayer'  => $game->for_two_player
+            'forTwoPlayer'  => $game->for_two_player,
+            'can_started'   => $game->can_started
         ]);
     }
 }

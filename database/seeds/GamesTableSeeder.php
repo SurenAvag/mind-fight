@@ -6,6 +6,7 @@ class GamesTableSeeder extends Seeder
 {
     public function run()
     {
+        \App\Models\Game::unsetEventDispatcher();
         $faker = Faker\Factory::create();
 
         foreach (range(1, 10) as $index) {
@@ -22,7 +23,7 @@ class GamesTableSeeder extends Seeder
                 'for_two_player'    => true,
                 'winner_id'         => $winnerId = \App\Models\User::inRandomOrder()->first()->id,
                 'loser_id'          => \App\Models\User::inRandomOrder()->where('id', '!=', $winnerId)->first()->id,
-                'subject_id'    => \App\Models\Subject::inRandomOrder()->first()->id
+                'subject_id'        => \App\Models\Subject::inRandomOrder()->first()->id
             ]);
         }
     }

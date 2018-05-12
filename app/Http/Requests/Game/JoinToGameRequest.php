@@ -3,7 +3,6 @@
 namespace App\Http\Requests\Game;
 
 use App\Http\Requests\BaseRequest;
-use Illuminate\Support\Facades\Auth;
 
 /**
  * @property mixed game
@@ -12,7 +11,7 @@ class JoinToGameRequest extends BaseRequest
 {
     public function authorize()
     {
-        return $this->game->for_two_player && $this->game->users()->count() != 2 && !Auth::user()->games->pluck('games.id')->contains($this->game->id);
+        return $this->game->for_two_player && $this->game->users()->count() == 2 && !$this->game->can_started;
     }
 
     public function rules()
@@ -24,7 +23,9 @@ class JoinToGameRequest extends BaseRequest
 
     public function joinToGame()
     {
-        $this->game->users()->syncWithoutDetaching(Auth::user());
+        $this->game->update([
+            'can_started' => true
+        ]);
 
         return $this;
     }
@@ -32,7 +33,7 @@ class JoinToGameRequest extends BaseRequest
     public function getMessage()
     {
         return [
-            'You joined to game.'
+            'Game started.'
         ];
     }
 }

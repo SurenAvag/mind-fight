@@ -28,6 +28,7 @@ class CreateGamesTable extends Migration
             $table->foreign('subject_id')->references('id')->on('subjects')->onDelete('cascade');
 
             $table->boolean('for_two_player')->default(false);
+            $table->boolean('can_started')->default(false);
 
             $table->timestamps();
         });

@@ -22,7 +22,8 @@ class Game extends BaseModel
         'winner_id',
         'loser_id',
         'for_two_player',
-        'subject_id'
+        'subject_id',
+        'can_started'
     ];
 
     protected $dispatchesEvents = [

@@ -18,16 +18,13 @@ class GameDataProvider
 
         $this->game = Game::create([
             'subject_id'        => $subjectId,
-            'for_two_player'    => $forTwoPlayer
+            'for_two_player'    => $forTwoPlayer,
+            'can_started'       => $forTwoPlayer ? false : true
         ]);
 
         $this->game->questions()->attach(array_pluck($questionIds, 'id'));
 
-        if ($secondPlayerId) {
-            $this->game->users()->syncWithoutDetaching([Auth::user(), $secondPlayerId]);
-        } else {
-            $this->game->users()->syncWithoutDetaching(Auth::user());
-        }
+        $this->game->users()->syncWithoutDetaching([Auth::id(), !$forTwoPlayer ?: $secondPlayerId]);
 
         return $this;
     }
