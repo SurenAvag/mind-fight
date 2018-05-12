@@ -15,7 +15,8 @@ class GameController extends ApiController
     {
         return $this->successResponse(
             GameTransformer::show(
-                $dataProvider->prepareData($request->subjectId, $request->forTwoPlayer)->getGame()
+                $dataProvider->prepareData($request->subjectId, $request->forTwoPlayer, $request->secondPlayerId)
+                    ->getGame()
             )
         );
     }

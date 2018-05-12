@@ -7,6 +7,7 @@ use App\Http\Requests\BaseRequest;
 /**
  * @property mixed forTwoPlayer
  * @property mixed subjectId
+ * @property mixed secondPlayerId
  */
 class GetGameRequest extends BaseRequest
 {
@@ -18,8 +19,9 @@ class GetGameRequest extends BaseRequest
     public function rules()
     {
         return [
-            'subjectId'     => 'required|exists:subjects,id',
-            'forTwoPlayer'  => 'required|boolean'
+            'subjectId'         => 'required|exists:subjects,id',
+            'forTwoPlayer'      => 'required|boolean',
+            'secondPlayerId'    => 'required_if:forTwoPlayer,1|exists:users,id'
         ];
     }
 }

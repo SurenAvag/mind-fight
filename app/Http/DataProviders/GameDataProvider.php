@@ -10,7 +10,7 @@ class GameDataProvider
 {
     private $game;
 
-    public function prepareData(int $subjectId, bool $forTwoPlayer)
+    public function prepareData(int $subjectId, bool $forTwoPlayer, int $secondPlayerId = null)
     {
         DB::statement("SET sql_mode = ''");
 
@@ -23,7 +23,11 @@ class GameDataProvider
 
         $this->game->questions()->attach(array_pluck($questionIds, 'id'));
 
-        $this->game->users()->syncWithoutDetaching(Auth::user());
+        if ($secondPlayerId) {
+            $this->game->users()->syncWithoutDetaching([Auth::user(), $secondPlayerId]);
+        } else {
+            $this->game->users()->syncWithoutDetaching(Auth::user());
+        }
 
         return $this;
     }
