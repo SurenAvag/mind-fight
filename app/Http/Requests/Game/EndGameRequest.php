@@ -24,7 +24,7 @@ class EndGameRequest extends BaseRequest
 
     public function authorize()
     {
-        return !$this->game->isFinished();
+        return !$this->game->isFinished() && Auth::user()->games()->pluck('games.id')->contains($this->game->id);
     }
 
     public function rules()
