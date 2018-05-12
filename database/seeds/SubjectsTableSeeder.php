@@ -11,6 +11,6 @@ class SubjectsTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(\App\Models\Subject::class)->create();
+        factory(\App\Models\Subject::class, 6)->create();
     }
 }

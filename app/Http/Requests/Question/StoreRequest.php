@@ -6,6 +6,13 @@ use App\Models\Question;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
+/**
+ * @property mixed text
+ * @property mixed subject_id
+ * @property mixed topic_id
+ * @property mixed level
+ * @property mixed time
+ */
 class StoreRequest extends FormRequest
 {
     private $question;
@@ -19,9 +26,10 @@ class StoreRequest extends FormRequest
     {
         return [
             'text'          => 'required|max:300',
-            'subject_id'    => 'exists:subjects,id',
-            'topic_id'      => 'exists:topics,id',
-            'level'         => ['required', Rule::in(Question::LEVELS)]
+            'subject_id'    => 'required|exists:subjects,id',
+            'topic_id'      => 'required|exists:topics,id',
+            'level'         => ['required', Rule::in(Question::LEVELS)],
+            'time'          => 'required|integer'
         ];
     }
 

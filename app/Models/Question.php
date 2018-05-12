@@ -4,9 +4,13 @@ namespace App\Models;
 
 use App\Models\Fragments\Question\Relations;
 
+/**
+ * @property mixed level
+ */
 class Question extends BaseModel
 {
     use Relations;
+
     const POINT = 3;
     const MINUTE_COEFFICIENT = 0.05;
 

@@ -6,6 +6,9 @@ use App\Models\Answer;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
+/**
+ * @property mixed answer
+ */
 class UpdateRequest extends FormRequest
 {
     public function authorize()

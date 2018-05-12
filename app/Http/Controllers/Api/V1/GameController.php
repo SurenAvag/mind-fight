@@ -16,12 +16,12 @@ class GameController extends ApiController
     {
         return $this->successResponse(
             GameTransformer::show(
-                $dataProvider->prepareData()->getGame()
+                $dataProvider->prepareData($request->subjectId, $request->forTwoPlayer)->getGame()
             )
         );
     }
 
-    public function endGame(EndGameRequest $request, Game $game, GameDataProvider $dataProvider)
+    public function endGame(EndGameRequest $request, Game $game)
     {
         return $this->successResponse([
             'points' => $request->endGame()->getPoints(),

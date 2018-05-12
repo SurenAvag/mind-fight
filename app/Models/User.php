@@ -2,13 +2,21 @@
 
 namespace App\Models;
 
+use App\Models\Fragments\User\Getters;
+use App\Models\Fragments\User\Relations;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Support\Facades\Auth;
 
+/**
+ * @property mixed rating
+ * @property mixed pivot
+ */
 class User extends Authenticatable
 {
-    use Notifiable;
+    use Notifiable, Getters, Relations;
+
+    const NORMAL_EXPERIENCE = 400;
 
     const NORM_POINT = 700;
     const TYPES = [
@@ -16,11 +24,6 @@ class User extends Authenticatable
         'lecturer'  => 2
     ];
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
     protected $fillable = [
         'id',
         'first_name',
@@ -28,15 +31,10 @@ class User extends Authenticatable
         'type',
         'email',
         'password',
-        'point',
+        'rating',
         'api_token'
     ];
 
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
     protected $hidden = [
         'password',
         'remember_token',
@@ -52,10 +50,5 @@ class User extends Authenticatable
     public function logout()
     {
         $this->updateToken();
-    }
-
-    public function getPointCoefficientAttribute()
-    {
-        return self::NORM_POINT / $this->point;
     }
 }

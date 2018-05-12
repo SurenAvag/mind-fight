@@ -6,11 +6,6 @@ use Illuminate\Database\Migrations\Migration;
 
 class CreateGameUsersTable extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         Schema::create('game_users', function (Blueprint $table) {
@@ -20,15 +15,13 @@ class CreateGameUsersTable extends Migration
             $table->unsignedInteger('game_id')->nullable();
             $table->foreign('game_id')->references('id')->on('games')->onDelete('cascade');
 
-            $table->integer('point')->nullable();
+            $table->integer('true_answers_count')->nullable();
+            $table->double('rating_changes')->nullable();
+
+            $table->string('finished_date')->nullable();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         Schema::dropIfExists('game_users');

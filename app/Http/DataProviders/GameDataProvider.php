@@ -3,26 +3,36 @@
 namespace App\Http\DataProviders;
 
 use App\Models\Game;
-use App\Models\Question;
-use App\Models\Subject;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class GameDataProvider
 {
     private $game;
 
-    public function prepareData(): self
+    public function prepareData(int $subjectId, bool $forTwoPlayer)
     {
-        DB::statement("SET sql_mode = ''");
-        $questionIds = DB::select("select id FROM (SELECT id, text, topic_id FROM questions ORDER BY RAND()) AS subquery GROUP BY topic_id");
+        $questionIds = $this->getRandomQuestionIds($subjectId);
 
-        $this->game = Game::create([])->fresh();
+        $this->game = Game::create([
+            'subject_id'        => $subjectId,
+            'for_two_player'    => $forTwoPlayer
+        ]);
+
         $this->game->questions()->attach(array_pluck($questionIds, 'id'));
 
-        $this->game->load('questions.answers');
+        $this->game->users()->syncWithoutDetaching(Auth::user());
 
         return $this;
+    }
+
+    private function getRandomQuestionIds(int $subjectId): array
+    {
+        return DB::select(
+            "select id FROM 
+                (SELECT id, text, topic_id FROM questions WHERE subject_id = $subjectId ORDER BY RAND())
+            AS subquery GROUP BY topic_id limit 10"
+        );
     }
 
     public function getGame()
