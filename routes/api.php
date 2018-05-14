@@ -17,6 +17,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::resource('subject', 'SubjectController', ['except' => ['create', 'edit']]);
 
         Route::get('game', 'GameController@getGame');
+        Route::get('game/{game}', 'GameController@getGameById');
         Route::post('game/{game}/end', 'GameController@endGame');
         Route::post('game/{game}/join', 'GameController@joinToGame');
 
