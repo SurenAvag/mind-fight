@@ -3,13 +3,23 @@
 namespace App\Models;
 
 use App\Graphs\DirectedGraph;
-use App\Graphs\Graph;
 
 /**
  * @property mixed questions
  */
 class Subject extends BaseModel
 {
+    const SUBJECT_NAMES = [
+        'Մաթեմատիկական անալիզ',
+        'Դիսկրետ մաթեմատիկա',
+        'Բարձրագույն հանրահաշիվ',
+        'Գրաֆների տեսություն',
+        'Տվյալների կառուցվածք',
+        'Մաթեմատիկական տրամաբանություն',
+        'Ալգորիթմների տեսություն',
+        'Օպտիմիզացիայի մեթոդներ'
+    ];
+
     public $timestamps = false;
 
     protected $fillable = [

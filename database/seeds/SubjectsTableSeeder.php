@@ -4,13 +4,12 @@ use Illuminate\Database\Seeder;
 
 class SubjectsTableSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
     public function run()
     {
-        factory(\App\Models\Subject::class, 6)->create();
+        foreach (\App\Models\Subject::SUBJECT_NAMES as $subjectName) {
+            factory(\App\Models\Subject::class)->create([
+                'name' => $subjectName
+            ]);
+        }
     }
 }

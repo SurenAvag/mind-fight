@@ -24,6 +24,7 @@ class User extends Authenticatable
     const NORMAL_EXPERIENCE = 400;
 
     const NORM_POINT = 700;
+
     const TYPES = [
         'student'   => 1,
         'lecturer'  => 2
