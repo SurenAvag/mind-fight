@@ -23,4 +23,11 @@ class GameTransformer extends Transformer
             'can_started'   => $game->can_started
         ]);
     }
+
+    public function forBroadcastTransform($game): array
+    {
+        return array_merge($this->simpleTransform($game), [
+            'subject' => SubjectTransformer::simple($game->subject)
+        ]);
+    }
 }

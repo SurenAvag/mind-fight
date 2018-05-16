@@ -9,6 +9,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
     Route::group(['middleware' => ['auth:api']], function () {
 
         Route::get('me', 'AuthController@me');
+        Route::get('me/disconnected', 'AuthController@disconnected');
         Route::post('logout', 'AuthController@logout');
 
         Route::resource('question', 'QuestionController', ['except' => ['create', 'edit']]);
@@ -18,6 +19,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
 
         Route::get('game', 'GameController@getGame');
         Route::get('game/{game}', 'GameController@getGameById');
+        Route::delete('game/{game}', 'GameController@destroy');
         Route::post('game/{game}/end', 'GameController@endGame');
         Route::post('game/{game}/join', 'GameController@joinToGame');
 

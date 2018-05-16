@@ -3,6 +3,7 @@
 namespace App\Models\Fragments\Game;
 
 use App\Models\Question;
+use App\Models\Subject;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -27,5 +28,10 @@ trait Relations
     public function loser(): BelongsTo
     {
         return $this->belongsTo(User::class, 'loser_id');
+    }
+
+    public function subject(): BelongsTo
+    {
+        return $this->belongsTo(Subject::class);
     }
 }

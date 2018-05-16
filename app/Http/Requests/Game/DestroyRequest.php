@@ -5,10 +5,7 @@ namespace App\Http\Requests\Game;
 use App\Http\Requests\BaseRequest;
 use Illuminate\Foundation\Http\FormRequest;
 
-/**
- * @property mixed game
- */
-class GetGameById extends BaseRequest
+class DestroyRequest extends BaseRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -17,7 +14,7 @@ class GetGameById extends BaseRequest
      */
     public function authorize()
     {
-        return $this->game->can_started;
+        return true;
     }
 
     /**

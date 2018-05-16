@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Game;
 
+use App\Events\GameStarted;
 use App\Http\Requests\BaseRequest;
 
 /**
@@ -26,6 +27,8 @@ class JoinToGameRequest extends BaseRequest
         $this->game->update([
             'can_started' => true
         ]);
+
+        event(new GameStarted($this->game));
 
         return $this;
     }
