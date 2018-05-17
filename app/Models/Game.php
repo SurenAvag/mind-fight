@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Events\GameCreated;
+use App\Events\GameDeleted;
+use App\Events\GameDeteled;
 use App\Models\Fragments\Game\Getters;
 use App\Models\Fragments\Game\Relations;
 
@@ -27,7 +29,8 @@ class Game extends BaseModel
     ];
 
     protected $dispatchesEvents = [
-        'created' => GameCreated::class
+        'created' => GameCreated::class,
+        'deleted' => GameDeleted::class,
     ];
 
     public function isFinished(): bool
@@ -40,6 +43,11 @@ class Game extends BaseModel
         }
 
         return isset($this->users()->first()->pivot->true_answers_count);
+    }
+
+    public function scopeNotFinished($query)
+    {
+        return $query->where('created_at', '>', '2018-05-15 23:33:07');
     }
 
     public function forSinglePlayer(): bool

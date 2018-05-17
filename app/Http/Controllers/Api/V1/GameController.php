@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Events\GameCreated;
+use App\Events\GameDeleted;
 use App\Http\DataProviders\GameDataProvider;
+use App\Http\Requests\Game\DestroyRequest;
 use App\Http\Requests\Game\EndGameRequest;
 use App\Http\Requests\Game\GetGameById;
 use App\Http\Requests\Game\GetGameRequest;
@@ -37,5 +40,16 @@ class GameController extends ApiController
     public function joinToGame(JoinToGameRequest $request, Game $game)
     {
         return $this->successResponse($request->joinToGame()->getMessage());
+    }
+
+    public function destroy(DestroyRequest $request, Game $game)
+    {
+        event(new GameDeleted($game));
+
+        Game::where('id', $game->id)->delete();
+
+        return $this->successResponse([
+            'game has been deleted'
+        ]);
     }
 }

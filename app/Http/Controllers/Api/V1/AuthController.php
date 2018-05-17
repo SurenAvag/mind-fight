@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Http\Requests\Auth\DisconnectedRequest;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\LogoutRequest;
 use App\Http\Requests\Auth\MeRequest;
@@ -36,6 +37,13 @@ class AuthController extends ApiController
             UserTransformer::login(
                 Auth::user()
             )
+        );
+    }
+
+    public function disconnected(DisconnectedRequest $request)
+    {
+        return $this->successResponse(
+            $request->handleDisconnecting()->getResponseMessage()
         );
     }
 }

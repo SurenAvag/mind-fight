@@ -2,7 +2,9 @@
 
 namespace App\Http\DataProviders;
 
+use App\Events\UsersAttachedToGame;
 use App\Models\Game;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -24,9 +26,19 @@ class GameDataProvider
 
         $this->game->questions()->attach(array_pluck($questionIds, 'id'));
 
-        $this->game->users()->syncWithoutDetaching([Auth::id(), !$forTwoPlayer ?: $secondPlayerId]);
+
+        $this->attachUsers($forTwoPlayer, $secondPlayerId);
 
         return $this;
+    }
+
+    private function attachUsers($forTwoPlayer, $secondPlayerId): void
+    {
+        $this->game->users()->syncWithoutDetaching([Auth::id(), !$forTwoPlayer ?: $secondPlayerId]);
+
+        if($secondPlayerId) {
+            event(new UsersAttachedToGame(Auth::user(), User::find($secondPlayerId), $this->game));
+        }
     }
 
     private function getRandomQuestionIds(int $subjectId): array

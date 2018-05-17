@@ -21,7 +21,7 @@ class GetGameRequest extends BaseRequest
         return [
             'subjectId'         => 'required|exists:subjects,id',
             'forTwoPlayer'      => 'required|boolean',
-            'secondPlayerId'    => 'required_if:forTwoPlayer,1|exists:users,id'
+            'secondPlayerId'    => 'required_if:forTwoPlayer,1|exists:users,id|nullable'
         ];
     }
 }

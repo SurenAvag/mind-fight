@@ -30,7 +30,7 @@ class EndGameRequest extends BaseRequest
     public function rules()
     {
         return [
-            'answers'   => 'required|array',
+            'answers'   => 'present|array',
             'answers.*' => 'integer|exists:answers,id|nullable'
         ];
     }

@@ -48,6 +48,7 @@ class UserTransformer extends Transformer
             'firstName' => $user->first_name,
             'lastName'  => $user->last_name,
             'point'     => $user->rating,
+            'type'  => $user->type,
         ]);
     }
 }
