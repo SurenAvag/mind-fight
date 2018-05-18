@@ -34,11 +34,11 @@ class DisconnectedRequest extends BaseRequest
 
     public function handleDisconnecting()
     {
-        foreach (Auth::user()->games()->notFinished()->get() as $game){
-            event(new GameDeleted($game));
-        }
-
-        Auth::user()->games()->notFinished()->delete();
+//        foreach (Auth::user()->games()->notFinished()->get() as $game){
+//            event(new GameDeleted($game));
+//        }
+//
+//        Auth::user()->games()->notFinished()->delete();
 
         return $this;
     }

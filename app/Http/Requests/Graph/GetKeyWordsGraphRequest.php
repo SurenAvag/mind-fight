@@ -28,13 +28,13 @@ class GetKeyWordsGraphRequest extends BaseRequest
 
     public function prepareData()
     {
-        $this->graph = Auth::user()->getAnsweredQuestionsKeyWordsGraph();
+        $this->graph = Auth::user()->getAnsweredQuestionsKeyWordsGraph($this->subject->id);
 
         return $this;
     }
 
     public function getGraph()
     {
-        return $this->graph;
+        return $this->graph->toArray();
     }
 }

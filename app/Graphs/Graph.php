@@ -35,6 +35,20 @@ class Graph implements GraphContract
         return $unionGraph;
     }
 
+    public function toArray()
+    {
+        return [
+            'nodes' => array_map(function ($node){ return [
+                'name' => $node->getName(),
+                'id' => $node->getId(),
+            ];}, $this->getNodes()),
+            'lines' => array_map(function ($node){ return [
+                'parentId' => $node->getParentId(),
+                'childId' => $node->getChildId(),
+            ];}, $this->getLines()),
+        ];
+    }
+
     public static function diff(GraphContract $baseGraph, GraphContract $subGraph): GraphContract
     {
         $diffGraph = new static();

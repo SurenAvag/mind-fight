@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Http\Controllers\Api\v1;
+namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Requests\Graph\GetKeyWordsGraphRequest;
+use App\Models\Subject;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
 class GraphController extends ApiController
 {
-    public function getKeyWordsGraph(GetKeyWordsGraphRequest $request)
+    public function getKeyWordsGraph(GetKeyWordsGraphRequest $request, Subject $subject)
     {
-        dd($request->prepareData()->getGraph()->asMatrix());
         return $this->successResponse(
             $request->prepareData()->getGraph()
         );
