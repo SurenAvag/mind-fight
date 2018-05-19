@@ -9,17 +9,6 @@ use App\Graphs\DirectedGraph;
  */
 class Subject extends BaseModel
 {
-    const SUBJECT_NAMES = [
-        'Մաթեմատիկական անալիզ',
-        'Դիսկրետ մաթեմատիկա',
-        'Բարձրագույն հանրահաշիվ',
-        'Գրաֆների տեսություն',
-        'Տվյալների կառուցվածք',
-        'Մաթեմատիկական տրամաբանություն',
-        'Ալգորիթմների տեսություն',
-        'Օպտիմիզացիայի մեթոդներ'
-    ];
-
     public $timestamps = false;
 
     protected $fillable = [

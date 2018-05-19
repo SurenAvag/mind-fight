@@ -6,10 +6,11 @@ class TopicsTableSeeder extends Seeder
 {
     public function run()
     {
-        foreach (\App\Models\Subject::all() as $subject) {
-            factory(\App\Models\Topic::class, 5)->create([
-                'subject_id' => $subject->id,
-            ]);
-        }
+//        foreach (\App\Models\Topic::DISKRET_TOPICS as $diskretTopic) {
+//            \App\Models\Topic::create([
+//                'subject_id'    => \App\Models\Subject::where('name', \App\Models\Subject::SUBJECT_NAMES['diskret'])->first()->id,
+//                'name'          => $diskretTopic
+//            ]);
+//        }
     }
 }

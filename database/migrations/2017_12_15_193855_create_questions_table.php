@@ -16,7 +16,7 @@ class CreateQuestionsTable extends Migration
         Schema::disableForeignKeyConstraints();
         Schema::create('questions', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('text');
+            $table->string('text', 1000);
 
             $table->unsignedInteger('subject_id');
             $table->foreign('subject_id')->references('id')->on('subjects')->onDelete('cascade');

@@ -6,12 +6,12 @@ class QuestionsTableSeeder extends Seeder
 {
     public function run()
     {
-        foreach (\App\Models\Question::MAT_ANALIZ_QUESTIONS as $question) {
-            factory(\App\Models\Question::class)->create([
-                'topic_id'      => \App\Models\Topic::inRandomOrder()->first()->id,
-                'subject_id'    => 1, //mat analiz
-                'text'          => $question
-            ]);
-        }
+//        foreach (\App\Models\Question::DISKRET_QUESTIONS as $question => $topic) {
+//            factory(\App\Models\Question::class)->create([
+//                'text'          => $question,
+//                'topic_id'      => ($topicModel = \App\Models\Topic::where('name', \App\Models\Topic::DISKRET_TOPICS[$topic])->first())->id,
+//                'subject_id'    => $topicModel->subject_id
+//            ]);
+//        }
     }
 }
