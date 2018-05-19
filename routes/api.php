@@ -23,6 +23,6 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::post('game/{game}/end', 'GameController@endGame');
         Route::post('game/{game}/join', 'GameController@joinToGame');
 
-        Route::get('get-key-words-graph', 'GraphController@getKeyWordsGraph');
+        Route::get('get-key-words-graph/{subject}', 'GraphController@getKeyWordsGraph');
     });
 });
