@@ -4,27 +4,16 @@ namespace App\Http\Requests\Auth;
 
 use App\Events\GameDeleted;
 use App\Http\Requests\BaseRequest;
-use App\Models\Game;
-use Illuminate\Foundation\Http\FormRequest;
+use App\Managers\Game\FinishGameManager;
 use Illuminate\Support\Facades\Auth;
 
 class DisconnectedRequest extends BaseRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
     public function authorize()
     {
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
     public function rules()
     {
         return [
@@ -34,13 +23,27 @@ class DisconnectedRequest extends BaseRequest
 
     public function handleDisconnecting()
     {
-//        foreach (Auth::user()->games()->notFinished()->get() as $game){
-//            event(new GameDeleted($game));
-//        }
-//
-//        Auth::user()->games()->notFinished()->delete();
+        $this->deleteNotStaredGame();
+
+        $this->finishStartedAndNotFinishedGames();
 
         return $this;
+    }
+
+    private function deleteNotStaredGame()
+    {
+        foreach (Auth::user()->games()->notStarted()->get() as $game) {
+            event(new GameDeleted($game));
+        }
+
+        Auth::user()->games()->notStarted()->delete();
+    }
+
+    private function finishStartedAndNotFinishedGames()
+    {
+        foreach (Auth::user()->games()->notFinished()->get() as $game) {
+            (new FinishGameManager($game, []))->endGame();
+        }
     }
 
     public function getResponseMessage()
@@ -49,5 +52,4 @@ class DisconnectedRequest extends BaseRequest
             'disconnect process has been finished'
         ];
     }
-
 }

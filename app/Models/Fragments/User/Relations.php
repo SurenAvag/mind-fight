@@ -9,6 +9,6 @@ trait Relations
 {
     public function games(): BelongsToMany
     {
-        return $this->belongsToMany(Game::class, 'game_users');
+        return $this->belongsToMany(Game::class, 'game_users')->withPivot('finished_date', 'true_answers_count');
     }
 }

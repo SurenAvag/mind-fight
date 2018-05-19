@@ -12,7 +12,8 @@ class JoinToGameRequest extends BaseRequest
 {
     public function authorize()
     {
-        return $this->game->for_two_player && $this->game->users()->count() == 2 && !$this->game->can_started;
+        return $this->game->for_two_player && $this->game->users()->count() == 2
+            && !$this->game->can_started;
     }
 
     public function rules()

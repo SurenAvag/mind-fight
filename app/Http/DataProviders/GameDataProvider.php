@@ -26,17 +26,19 @@ class GameDataProvider
 
         $this->game->questions()->attach(array_pluck($questionIds, 'id'));
 
-
         $this->attachUsers($forTwoPlayer, $secondPlayerId);
 
         return $this;
     }
 
-    private function attachUsers($forTwoPlayer, $secondPlayerId): void
+    private function attachUsers(bool $forTwoPlayer, $secondPlayerId): void
     {
-        $this->game->users()->syncWithoutDetaching([Auth::id(), !$forTwoPlayer ?: $secondPlayerId]);
+        $attachingUserIds = [];
+        $attachingUserIds[] = Auth::id();
+        (!$forTwoPlayer) ?: $attachingUserIds[] = $secondPlayerId;
+        $this->game->users()->syncWithoutDetaching($attachingUserIds);
 
-        if($secondPlayerId) {
+        if ($secondPlayerId) {
             event(new UsersAttachedToGame(Auth::user(), User::find($secondPlayerId), $this->game));
         }
     }
@@ -45,8 +47,8 @@ class GameDataProvider
     {
         return DB::select(
             "select id FROM 
-                (SELECT id, text, topic_id FROM questions WHERE subject_id = $subjectId ORDER BY RAND())
-            AS subquery GROUP BY topic_id limit 10"
+                (SELECT id, text, topic_id FROM questions WHERE subject_id = $subjectId)
+            AS subquery GROUP BY topic_id ORDER BY RAND() limit 5"
         );
     }
 

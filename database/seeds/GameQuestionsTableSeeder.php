@@ -4,11 +4,6 @@ use Illuminate\Database\Seeder;
 
 class GameQuestionsTableSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
     public function run()
     {
         foreach (\App\Models\Game::all() as $game) {

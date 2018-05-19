@@ -9,7 +9,7 @@ class QuestionsTableSeeder extends Seeder
         foreach (\App\Models\Question::MAT_ANALIZ_QUESTIONS as $question) {
             factory(\App\Models\Question::class)->create([
                 'topic_id'      => \App\Models\Topic::inRandomOrder()->first()->id,
-                'subject_id'    => 1,//mat analiz
+                'subject_id'    => 1, //mat analiz
                 'text'          => $question
             ]);
         }

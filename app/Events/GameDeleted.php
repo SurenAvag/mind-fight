@@ -5,10 +5,7 @@ namespace App\Events;
 use App\Models\Game;
 use App\Transformers\GameTransformer;
 use App\Transformers\UserTransformer;
-use Illuminate\Broadcasting\Channel;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Broadcasting\PrivateChannel;
-use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
@@ -20,11 +17,6 @@ class GameDeleted implements ShouldBroadcast
 
     private $game;
 
-    /**
-     * Create a new event instance.
-     *
-     * @param Game $game
-     */
     public function __construct(Game $game)
     {
         $this->game = $game;
@@ -38,8 +30,8 @@ class GameDeleted implements ShouldBroadcast
     public function broadcastWith()
     {
         return [
-            'game'  => GameTransformer::simple($this->game),
-            'deletedByUser'  => UserTransformer::forBroadcast(Auth::user())
+            'game'          => GameTransformer::simple($this->game),
+            'deletedByUser' => UserTransformer::forBroadcast(Auth::user())
         ];
     }
 }
