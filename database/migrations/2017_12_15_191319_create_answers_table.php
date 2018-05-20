@@ -6,17 +6,12 @@ use Illuminate\Database\Migrations\Migration;
 
 class CreateAnswersTable extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         Schema::disableForeignKeyConstraints();
         Schema::create('answers', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('text');
+            $table->string('text', 1000);
 
             $table->unsignedInteger('question_id')->nullable();
             $table->foreign('question_id')->references('id')->on('questions')->onDelete('cascade');
@@ -27,11 +22,6 @@ class CreateAnswersTable extends Migration
         Schema::enableForeignKeyConstraints();
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         Schema::disableForeignKeyConstraints();
