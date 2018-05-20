@@ -70,13 +70,15 @@ class User extends Authenticatable
         return $this->belongsToMany(Question::class);
     }
 
-    public function getAnsweredQuestionsKeyWordsGraph($subjectId = 1): GraphContract
+    public function getAnsweredQuestionsKeyWordsGraph($subjectId, $type): GraphContract
     {
         $graphs = [];
 
-        foreach ($this->answeredQuestions()->where('subject_id', $subjectId)->get() as $question) {
+        foreach ($this->answeredQuestions()
+                     ->where('subject_id', $subjectId)
+                     ->get() as $question) {
 
-            $graphs []= $question->asGraph();
+            $graphs []= $question->asGraph($type);
         }
 
         return DirectedGraph::union(...$graphs);

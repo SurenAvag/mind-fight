@@ -16,6 +16,12 @@ class Question extends BaseModel
 {
     use Relations;
 
+    const GRAPH_TYPES = [
+        'answered' => 1,
+        'notAnswered' => 2,
+        'all' => 3
+    ];
+
     const POINT = 3;
     const MINUTE_COEFFICIENT = 0.05;
 
@@ -77,14 +83,24 @@ class Question extends BaseModel
         'time'
     ];
 
-    public function asGraph()
+    public function asGraph($type)
     {
         $keyWords = KeyWord::where(function ($query) {
 
             foreach (explode(' ', $this->text) as $word) {
                 $query->orWhere('name', 'like', "%$word%");
             }
-        })->get();
+        })->where('subject_id', $this->subject->id)->get();
+
+        if($type == self::GRAPH_TYPES['notAnswered']){
+            $keyWords = KeyWord::whereNotIn('id', $keyWords->pluck('id')->toArray())
+                ->where('subject_id', $this->subject->id)->get();
+        } elseif($type == self::GRAPH_TYPES['all']) {
+            $keyWords = KeyWord::where('subject_id', $this->subject->id)->get();
+        } else {
+            session(['fullAnswered' => $keyWords->count() == KeyWord::where('subject_id', $this->subject->id)->count()]);
+        }
+//        dd($keyWords->count(), KeyWord::where('subject_id', $this->subject->id)->count());
 
         $nodes = $this->nodesFromKeyWords($keyWords);
         $lines = $this->linesFromKeyWords($keyWords);

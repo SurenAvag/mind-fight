@@ -2,6 +2,7 @@
 
 namespace App\Managers\Game;
 
+use App\Events\GameEnded;
 use App\Managers\Rating\EloAlgorithmManager;
 use App\Models\Game;
 use App\Models\Question;
@@ -39,7 +40,26 @@ class FinishGameManager
             $this->updateGame();
         }
 
+        $this->fireFinishEvent();
+
         return $this;
+    }
+
+    private function fireFinishEvent() : void
+    {
+        if ($this->game->for_two_player && $this->gameIsFinished) {
+            event(
+                new GameEnded([
+                    'gameIsFinished' => $this->gameIsFinished,
+                    'gameForTwoPlayer' => true,
+                    'winnerUser' => $this->game->winner,
+                    'winnerPoint' => (int)$this->winnerRatingChanges,
+                    'loserUser' => $this->game->loser,
+                    'loserPoint' => (int)$this->loserRatingChanges,
+                    'gameId' => $this->game->id
+                ])
+            );
+        }
     }
 
     private function updateGame(): void
@@ -139,9 +159,9 @@ class FinishGameManager
                     'gameIsFinished'    => $this->gameIsFinished,
                     'gameForTwoPlayer'  => true,
                     'winnerUser'        => $this->game->winner,
-                    'winnerPoint'       => $this->winnerRatingChanges,
+                    'winnerPoint'       => (int)$this->winnerRatingChanges,
                     'loserUser'         => $this->game->loser,
-                    'loserPoint'        => $this->loserRatingChanges,
+                    'loserPoint'        => (int)$this->loserRatingChanges,
                 ];
             }
 
@@ -156,7 +176,7 @@ class FinishGameManager
                     'gameIsFinished'    => $this->gameIsFinished,
                     'gameForTwoPlayer'  => false,
                     'isWin'             => true,
-                    'points'            => $this->winnerRatingChanges
+                    'points'            => (int)$this->winnerRatingChanges
                 ];
             }
 
@@ -164,7 +184,7 @@ class FinishGameManager
                 'gameIsFinished'    => $this->gameIsFinished,
                 'gameForTwoPlayer'  => false,
                 'isWin'             => false,
-                'points'            => $this->winnerRatingChanges
+                'points'            => (int)$this->winnerRatingChanges
             ];
         }
     }
