@@ -14,7 +14,7 @@ class IndexRequest extends BaseRequest
     public function rules()
     {
         return [
-            //
+            'subject_id' => 'required|exists:key_words,subject_id'
         ];
     }
 }

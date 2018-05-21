@@ -8,6 +8,6 @@ class KeyWordDataProvider
 {
     public function getKeyWords()
     {
-        return KeyWord::paginate();
+        return KeyWord::where('subject_id', request()->subject_id)->paginate();
     }
 }
