@@ -2,29 +2,44 @@
 
 namespace App\Http\Requests\Topic;
 
+use App\Models\Topic;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
+    private $topic;
+
     public function authorize()
     {
-        return false;
+        return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
     public function rules()
     {
         return [
-            //
+            'name'          => 'required',
+            'subject_id'    => 'required|exists:subjects,id'
         ];
     }
+
+    public function persist(): self
+    {
+        $this->topic = Topic::create(
+            $this->getProcessedData()
+        );
+
+        return $this;
+    }
+
+    public function getProcessedData(): array
+    {
+        return array_merge($this->all(),[
+            //
+        ]);
+    }
+
+   public function getTopic(): Topic
+   {
+       return $this->topic;
+   }
 }

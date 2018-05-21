@@ -38,8 +38,9 @@ class TopicTransformer extends Transformer
     public function simpleTransform(Model $item): array
     {
         return [
-            'id'                => $item->id,
-            'name'              => $item->name,
+            'id'        => $item->id,
+            'name'      => $item->name,
+            'subject'   => SubjectTransformer::simple($item->subject)
         ];
     }
 }

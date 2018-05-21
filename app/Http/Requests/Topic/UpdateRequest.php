@@ -2,29 +2,46 @@
 
 namespace App\Http\Requests\Topic;
 
+use App\Models\Topic;
+use App\Transformers\TopicTransformer;
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * @property mixed topic
+ */
 class UpdateRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
     public function rules()
     {
         return [
-            //
+            'name'          => 'sometimes|required',
+            'subject_id'    => 'sometimes|required|exists:subjects,id',
         ];
+    }
+
+    public function persist(): self
+    {
+        $this->topic->update(
+            $this->getProcessedData()
+        );
+
+        return $this;
+    }
+
+    public function getProcessedData(): array
+    {
+        return array_merge($this->all(),[
+            //
+        ]);
+    }
+
+    public function getTopic(): Topic
+    {
+        return $this->topic;
     }
 }
