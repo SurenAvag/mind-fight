@@ -14,7 +14,7 @@ class IndexRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'subject_id' => 'required|exists:questions,subject_id'
         ];
     }
 }
