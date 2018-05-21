@@ -2,6 +2,9 @@
 
 namespace App\Models;
 
+use App\Models\Fragments\KeyWord\Relations;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
 /**
  * @property mixed id
  * @property mixed name
@@ -10,15 +13,12 @@ namespace App\Models;
  */
 class KeyWord extends BaseModel
 {
+    use Relations;
+
     public $timestamps = false;
 
-    public function children()
-    {
-        return $this->belongsToMany(KeyWord::class, 'key_word_dependence', 'parent_id', 'child_id');
-    }
-
-    public function parents()
-    {
-        return $this->belongsToMany(KeyWord::class, 'key_word_dependence', 'child_id', 'parent_id');
-    }
+    protected $fillable = [
+        'name',
+        'subject_id'
+    ];
 }

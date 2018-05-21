@@ -16,6 +16,8 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::resource('answer', 'AnswerController', ['except' => ['index', 'create', 'edit']]);
         Route::resource('user', 'UserController', ['except' => ['create', 'edit']]);
         Route::resource('subject', 'SubjectController', ['except' => ['create', 'edit']]);
+        Route::resource('keyWord', 'KeyWordController', ['except' => ['create', 'edit']]);
+        Route::resource('topic', 'TopicController', ['except' => ['create', 'edit']]);
 
         Route::get('game', 'GameController@getGame');
         Route::get('game/{game}', 'GameController@getGameById');
