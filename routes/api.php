@@ -26,5 +26,8 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::post('game/{game}/join', 'GameController@joinToGame');
 
         Route::get('get-key-words-graph/{subject}', 'GraphController@getKeyWordsGraph');
+
+        Route::post('parent-key-word/{parentKeyWord}/attach/child-key-word/{childKeyWord}', 'KeyWordController@attachChild');
+        Route::post('child-key-word/{childKeyWord}/attach/parent-key-word/{parentKeyWord}', 'KeyWordController@attachParent');
     });
 });

@@ -2,13 +2,13 @@
 
 namespace App\Http\Requests\KeyWord;
 
+use App\Http\Requests\BaseRequest;
 use App\Models\KeyWord;
-use Illuminate\Foundation\Http\FormRequest;
 
 /**
  * @property mixed keyWord
  */
-class UpdateRequest extends FormRequest
+class UpdateRequest extends BaseRequest
 {
     public function authorize()
     {

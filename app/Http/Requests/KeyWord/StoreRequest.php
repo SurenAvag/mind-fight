@@ -2,10 +2,10 @@
 
 namespace App\Http\Requests\KeyWord;
 
+use App\Http\Requests\BaseRequest;
 use App\Models\KeyWord;
-use Illuminate\Foundation\Http\FormRequest;
 
-class StoreRequest extends FormRequest
+class StoreRequest extends BaseRequest
 {
     private $keyWord;
 

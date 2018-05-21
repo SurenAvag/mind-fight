@@ -2,9 +2,9 @@
 
 namespace App\Http\Requests\KeyWord;
 
-use Illuminate\Foundation\Http\FormRequest;
+use App\Http\Requests\BaseRequest;
 
-class IndexRequest extends FormRequest
+class IndexRequest extends BaseRequest
 {
     public function authorize()
     {

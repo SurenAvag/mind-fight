@@ -2,9 +2,9 @@
 
 namespace App\Http\Requests\KeyWord;
 
-use Illuminate\Foundation\Http\FormRequest;
+use App\Http\Requests\BaseRequest;
 
-class DestroyRequest extends FormRequest
+class DestroyRequest extends BaseRequest
 {
     public function authorize()
     {

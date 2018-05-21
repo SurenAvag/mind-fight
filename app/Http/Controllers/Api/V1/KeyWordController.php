@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\DataProviders\KeyWordDataProvider;
+use App\Http\Requests\KeyWord\AttachChildRequest;
+use App\Http\Requests\KeyWord\AttachParentRequest;
 use App\Http\Requests\KeyWord\DestroyRequest;
 use App\Http\Requests\KeyWord\IndexRequest;
 use App\Http\Requests\KeyWord\ShowRequest;
@@ -56,5 +58,19 @@ class KeyWordController extends ApiController
         return $this->successResponse([
             'Key word has been deleted'
         ]);
+    }
+
+    public function attachChild(AttachChildRequest $request, KeyWord $parentKeyWord, KeyWord $childKeyWord): JsonResponse
+    {
+        return $this->successResponse(
+            $request->persist()->getMessage()
+        );
+    }
+
+    public function attachParent(AttachParentRequest $request, KeyWord $childKeyWord, KeyWord $parentKeyWord): JsonResponse
+    {
+        return $this->successResponse(
+            $request->persist()->getMessage()
+        );
     }
 }
