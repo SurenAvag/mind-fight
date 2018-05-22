@@ -8,6 +8,6 @@ class SubjectDataProvider
 {
     public function getQuestions()
     {
-        return Subject::paginate();
+        return Subject::paginate(6000);
     }
 }

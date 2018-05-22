@@ -50,7 +50,7 @@ class QuestionTransformer extends Transformer
     {
         return [
             'id'    => $item->id,
-            'text'  => $item->text . $item->trueAnswer->id,
+            'text'  => $item->text . ($item->trueAnswer->id ?? ''),
             'time'      => $item->time,
         ];
     }

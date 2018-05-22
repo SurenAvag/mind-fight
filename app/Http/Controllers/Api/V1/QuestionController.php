@@ -35,7 +35,7 @@ class QuestionController extends ApiController
     public function store(StoreRequest $request)
     {
         return $this->successResponse(
-            QuestionTransformer::store(
+            QuestionTransformer::show(
                 $request->persist()->getQuestion()
             )
         );

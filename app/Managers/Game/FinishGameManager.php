@@ -113,10 +113,10 @@ class FinishGameManager
         );
 
         if ($this->winner) {
-            $this->winner->increment('rating', $this->winnerRatingChanges);
+            $this->winner->increment('rating', (int)$this->winnerRatingChanges);
         }
         if ($this->loser) {
-            $this->loser->decrement('rating', $this->loserRatingChanges);
+            $this->loser->decrement('rating', (int)$this->loserRatingChanges);
         }
 
         $this->updatePivotTableRatingChangesAttribute();
